@@ -1,6 +1,7 @@
 import CoreGraphics
 import Combine
 import FunOptics
+import CasePaths
 import Harvest
 import HarvestOptics
 
@@ -44,24 +45,24 @@ extension Root
 
     public static func effectMapping<S: Scheduler>() -> EffectMapping<S>
     {
-        .reduce(.all, [
+        return .reduce(.all, [
             self._effectMapping(),
 
             Game.effectMapping()
                 .contramapWorld { _ in .init() }
-                .transform(input: .fromEnum(\Root.Input.game))
+                .transform(input: .init(prism: .init(/Root.Input.game)))
                 .transform(state: .init(lens: Lens(\Root.State.game)))
                 .transform(id: Prism(tryGet: { $0.game }, inject: EffectID.game)),
 
             Favorite.effectMapping()
                 .contramapWorld { .init(fileScheduler: $0.fileScheduler) }
-                .transform(input: .fromEnum(\Root.Input.favorite))
+                .transform(input: .init(prism: .init(/Root.Input.favorite)))
                 .transform(state: .init(lens: Lens(\Root.State.favorite)))
                 .transform(id: .never),
 
             PatternSelect.effectMapping()
                 .contramapWorld { .init(fileScheduler: $0.fileScheduler) }
-                .transform(input: .fromEnum(\.patternSelect))
+                .transform(input: .init(prism: .init(/Root.Input.patternSelect)))
                 .transform(state: Lens(\.patternSelect) >>> some())
                 .transform(id: .never)
         ])
@@ -143,47 +144,6 @@ extension Root
         public init(fileScheduler: S)
         {
             self.fileScheduler = fileScheduler
-        }
-    }
-}
-
-// MARK: - Enum Properties
-
-extension Root.Input
-{
-    public var game: Game.Input?
-    {
-        get {
-            guard case let .game(value) = self else { return nil }
-            return value
-        }
-        set {
-            guard case .game = self, let newValue = newValue else { return }
-            self = .game(newValue)
-        }
-    }
-
-    public var favorite: Favorite.Input?
-    {
-        get {
-            guard case let .favorite(value) = self else { return nil }
-            return value
-        }
-        set {
-            guard case .favorite = self, let newValue = newValue else { return }
-            self = .favorite(newValue)
-        }
-    }
-
-    public var patternSelect: PatternSelect.Input?
-    {
-        get {
-            guard case let .patternSelect(value) = self else { return nil }
-            return value
-        }
-        set {
-            guard case .patternSelect = self, let newValue = newValue else { return }
-            self = .patternSelect(newValue)
         }
     }
 }

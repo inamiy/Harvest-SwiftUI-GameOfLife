@@ -1,6 +1,7 @@
 import CoreGraphics
 import Combine
 import FunOptics
+import CasePaths
 import Harvest
 import HarvestOptics
 
@@ -195,7 +196,8 @@ extension Game.State.DragState
 {
     var dragging: Bool?
     {
-        guard case let .dragging(value) = self else { return nil }
-        return value
+//        guard case let .dragging(value) = self else { return nil }
+//        return value
+        (/Game.State.DragState.dragging)(self)
     }
 }

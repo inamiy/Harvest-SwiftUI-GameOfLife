@@ -1,5 +1,6 @@
 import Combine
 import FunOptics
+import CasePaths
 import Harvest
 import HarvestOptics
 
@@ -85,7 +86,7 @@ extension PatternSelect
 
             Favorite.effectMapping()
                 .contramapWorld { .init(fileScheduler: $0.fileScheduler) }
-                .transform(input: .fromEnum(\.favorite))
+                .transform(input: .init(prism: .init(/PatternSelect.Input.favorite)))
                 .transform(state: .init(lens: Lens(\.favorite)))
         ])
     }
@@ -225,32 +226,19 @@ extension PatternSelect
 
 // MARK: - Enum Properties
 
-extension PatternSelect.Input
-{
-    var favorite: Favorite.Input?
-    {
-        get {
-            guard case let .favorite(value) = self else { return nil }
-            return value
-        }
-        set {
-            guard case .favorite = self, let newValue = newValue else { return }
-            self = .favorite(newValue)
-        }
-    }
-}
-
 extension PatternSelect.State.Status
 {
     public var isLoading: Bool
     {
-        guard case .loading = self else { return false }
-        return true
+//        guard case .loading = self else { return false }
+//        return true
+        (/PatternSelect.State.Status.loading)(self) != nil
     }
 
     public var loaded: [PatternSelect.Section<Void>]?
     {
-        guard case let .loaded(value) = self else { return nil }
-        return value
+//        guard case let .loaded(value) = self else { return nil }
+//        return value
+        (/PatternSelect.State.Status.loaded)(self)
     }
 }

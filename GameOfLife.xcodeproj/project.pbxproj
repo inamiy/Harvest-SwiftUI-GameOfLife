@@ -649,7 +649,7 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/inamiy/Harvest";
 			requirement = {
-				branch = master;
+				branch = "swift-case-paths";
 				kind = branch;
 			};
 		};

@@ -5,18 +5,27 @@
         "package": "FunOptics",
         "repositoryURL": "https://github.com/inamiy/FunOptics",
         "state": {
-          "branch": null,
-          "revision": "6fe4e61254dcbf3b773b38e871df4d1df7f2b685",
-          "version": "1.0.4"
+          "branch": "swift-case-paths",
+          "revision": "7d1b94eb1acfe8d96e67340fc45b13cd7f2d5389",
+          "version": null
         }
       },
       {
         "package": "Harvest",
         "repositoryURL": "https://github.com/inamiy/Harvest",
         "state": {
-          "branch": "master",
-          "revision": "9122239f1f52b9979e160f54705f9e8f4004ae3b",
+          "branch": "swift-case-paths",
+          "revision": "c375f6bc726e1803720cefaac74d2cc5b7112b4f",
           "version": null
+        }
+      },
+      {
+        "package": "CasePaths",
+        "repositoryURL": "https://github.com/pointfreeco/swift-case-paths",
+        "state": {
+          "branch": null,
+          "revision": "a9c1e05518b6d95cf5844d823020376f2b6ff842",
+          "version": "0.1.0"
         }
       }
     ]
