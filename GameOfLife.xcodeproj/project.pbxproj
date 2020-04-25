@@ -21,9 +21,6 @@
 		1FA37F152374782F004ABA30 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FA37F142374782F004ABA30 /* Assets.xcassets */; };
 		1FA37F182374782F004ABA30 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1FA37F172374782F004ABA30 /* Preview Assets.xcassets */; };
 		1FA37F1B2374782F004ABA30 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1FA37F192374782F004ABA30 /* LaunchScreen.storyboard */; };
-		1FA37F2423747865004ABA30 /* HarvestOptics in Frameworks */ = {isa = PBXBuildFile; productRef = 1FA37F2323747865004ABA30 /* HarvestOptics */; };
-		1FA37F2623747865004ABA30 /* Harvest in Frameworks */ = {isa = PBXBuildFile; productRef = 1FA37F2523747865004ABA30 /* Harvest */; };
-		1FA37F2823747865004ABA30 /* HarvestStore in Frameworks */ = {isa = PBXBuildFile; productRef = 1FA37F2723747865004ABA30 /* HarvestStore */; };
 		1FA37F32237479E7004ABA30 /* GameOfLife.h in Headers */ = {isa = PBXBuildFile; fileRef = 1FA37F30237479E7004ABA30 /* GameOfLife.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		1FA37F35237479E7004ABA30 /* GameOfLife.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FA37F2E237479E7004ABA30 /* GameOfLife.framework */; };
 		1FA37F36237479E7004ABA30 /* GameOfLife.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 1FA37F2E237479E7004ABA30 /* GameOfLife.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -96,9 +93,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1FA37F2623747865004ABA30 /* Harvest in Frameworks */,
-				1FA37F2823747865004ABA30 /* HarvestStore in Frameworks */,
-				1FA37F2423747865004ABA30 /* HarvestOptics in Frameworks */,
 				1FA37F35237479E7004ABA30 /* GameOfLife.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -258,9 +252,6 @@
 			);
 			name = GameOfLifeApp;
 			packageProductDependencies = (
-				1FA37F2323747865004ABA30 /* HarvestOptics */,
-				1FA37F2523747865004ABA30 /* Harvest */,
-				1FA37F2723747865004ABA30 /* HarvestStore */,
 			);
 			productName = GameOfLifeApp;
 			productReference = 1FA37F0B2374782E004ABA30 /* GameOfLifeApp.app */;
@@ -665,21 +656,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		1FA37F2323747865004ABA30 /* HarvestOptics */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1FA37F2223747865004ABA30 /* XCRemoteSwiftPackageReference "Harvest" */;
-			productName = HarvestOptics;
-		};
-		1FA37F2523747865004ABA30 /* Harvest */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1FA37F2223747865004ABA30 /* XCRemoteSwiftPackageReference "Harvest" */;
-			productName = Harvest;
-		};
-		1FA37F2723747865004ABA30 /* HarvestStore */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 1FA37F2223747865004ABA30 /* XCRemoteSwiftPackageReference "Harvest" */;
-			productName = HarvestStore;
-		};
 		1FA37F4623747A47004ABA30 /* Harvest */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1FA37F2223747865004ABA30 /* XCRemoteSwiftPackageReference "Harvest" */;
