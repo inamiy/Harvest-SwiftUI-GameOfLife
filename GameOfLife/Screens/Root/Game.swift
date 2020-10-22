@@ -59,7 +59,7 @@ extension Game
 
     static func effectMapping() -> EffectMapping
     {
-        .makeInout { input, state in
+        .makeInout { input, state, world in
             switch input {
             case let .updateBoardSize(size):
                 let width = Int(size.width / state.cellLength)
@@ -69,7 +69,7 @@ extension Game
 
             case .startTimer:
                 state.isRunningTimer = true
-                return timerEffect(interval: state.timerInterval)
+                return timerEffect(interval: state.timerInterval, world: world)
 
             case .stopTimer:
                 state.isRunningTimer = false
@@ -110,7 +110,7 @@ extension Game
 
     typealias EffectMapping = Harvester<Input, State>.EffectMapping<World, EffectQueue, EffectID>
 
-    typealias Effect = Harvest.Effect<World, Input, EffectQueue, EffectID>
+    typealias Effect = Harvest.Effect<Input, EffectQueue, EffectID>
 
     typealias EffectQueue = BasicEffectQueue
 
@@ -137,12 +137,11 @@ extension Game
             .eraseToAnyPublisher()
     }
 
-    private static func timerEffect(interval: TimeInterval) -> Effect
+    private static func timerEffect(interval: TimeInterval, world: World) -> Effect
     {
-        Effect(queue: .defaultEffectQueue, id: .timer) { world in
-            world.timer(interval)
-                .map { _ in Input.tick }
-        }
+        world.timer(interval)
+            .map { _ in Input.tick }
+            .toEffect(queue: .defaultEffectQueue, id: .timer)
     }
 }
 

@@ -92,17 +92,17 @@ extension PatternSelect
 
     private static func _effectMapping<S: Scheduler>() -> EffectMapping<S>
     {
-        .makeInout { input, state in
+        .makeInout { input, state, world in
             switch input {
             case .loadPatternFiles:
-                return self.loadPatternFilesEffect()
+                return self.loadPatternFilesEffect(world: world)
 
             case let .didLoadPatternFiles(sections):
                 state.status = .loaded(sections)
 
             case let .didSelectPatternURL(url):
                 state.status = .loading
-                return self.parsePatternFileEffect(url: url)
+                return self.parsePatternFileEffect(url: url, world: world)
 
             case .didParsePatternFile:
                 return nil
@@ -120,7 +120,7 @@ extension PatternSelect
 
     typealias EffectMapping<S: Scheduler> = Harvester<Input, State>.EffectMapping<World<S>, EffectQueue, EffectID>
 
-    typealias Effect<S: Scheduler> = Harvest.Effect<World<S>, Input, EffectQueue, EffectID>
+    typealias Effect<S: Scheduler> = Harvest.Effect<Input, EffectQueue, EffectID>
 
     typealias EffectQueue = BasicEffectQueue
 
@@ -200,26 +200,24 @@ extension PatternSelect
         return sections
     }
 
-    private static func loadPatternFilesEffect<S: Scheduler>() -> Effect<S>
+    private static func loadPatternFilesEffect<S: Scheduler>(world: World<S>) -> Effect<S>
     {
-        Effect { world in
-            simpleEffectPublisher(
-                run: world.loadPatterns,
-                inject: { Input.didLoadPatternFiles($0 ?? []) }
-            )
-                .subscribe(on: world.fileScheduler)
-        }
+        simpleEffectPublisher(
+            run: world.loadPatterns,
+            inject: { Input.didLoadPatternFiles($0 ?? []) }
+        )
+        .subscribe(on: world.fileScheduler)
+        .toEffect()
     }
 
-    private static func parsePatternFileEffect<S: Scheduler>(url: URL) -> Effect<S>
+    private static func parsePatternFileEffect<S: Scheduler>(url: URL, world: World<S>) -> Effect<S>
     {
-        Effect { world in
-            simpleEffectPublisher(
-                run: { try Pattern.parseRunLengthEncoded(url: url) },
-                inject: Input.didParsePatternFile
-            )
-                .subscribe(on: world.fileScheduler)
-        }
+        simpleEffectPublisher(
+            run: { try Pattern.parseRunLengthEncoded(url: url) },
+            inject: Input.didParsePatternFile
+        )
+        .subscribe(on: world.fileScheduler)
+        .toEffect()
     }
 }
 

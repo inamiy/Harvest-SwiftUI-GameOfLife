@@ -69,7 +69,7 @@ extension Root
 
     private static func _effectMapping<S: Scheduler>() -> EffectMapping<S>
     {
-        .makeInout { input, state in
+        .makeInout { input, state, world in
             switch input {
             case .presentPatternSelect:
                 state.patternSelect = PatternSelect.State(favoritePatternNames: state.favorite.patternNames)
@@ -88,11 +88,10 @@ extension Root
                 // This logic basically tee-ing `EffectMapping` between `Root` (parent) and `Game` (child),
                 // which could possibly be improved by more elegant `EffectMapping` composition.
                 if let pattern = pattern {
-                    if let (newGameState, effect) = Game.effectMapping().run(.updatePattern(pattern), state.game) {
+                    if let (newGameState, effect) = Game.effectMapping().run(.updatePattern(pattern), state.game, .init()) {
                         state.game = newGameState
 
                         gameEffect = effect
-                            .contramapWorld { _ in .init() }
                             .mapInput(Root.Input.game)
                             .transform(id: Prism(tryGet: { $0.game }, inject: EffectID.game))
                     }
@@ -121,7 +120,7 @@ extension Root
 
     public typealias EffectMapping<S: Scheduler> = Harvester<Input, State>.EffectMapping<World<S>, EffectQueue, EffectID>
 
-    public typealias Effect<S: Scheduler> = Harvest.Effect<World<S>, Input, EffectQueue, EffectID>
+    public typealias Effect<S: Scheduler> = Harvest.Effect<Input, EffectQueue, EffectID>
 
     public typealias EffectQueue = BasicEffectQueue
 

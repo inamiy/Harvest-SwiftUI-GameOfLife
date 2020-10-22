@@ -25,25 +25,25 @@ extension Favorite
 
     static func effectMapping<S: Scheduler>() -> EffectMapping<S>
     {
-        .makeInout { input, state in
+        .makeInout { input, state, world in
             switch input {
             case let .addFavorite(patternName):
                 state.patternNames.removeAll { $0 == patternName }
                 state.patternNames.insert(patternName, at: 0)
-                return self.saveFavoritesEffect(patternNames: state.patternNames)
+                return self.saveFavoritesEffect(patternNames: state.patternNames, world: world)
 
             case let .removeFavorite(patternName):
                 state.patternNames.removeAll { $0 == patternName }
-                return self.saveFavoritesEffect(patternNames: state.patternNames)
+                return self.saveFavoritesEffect(patternNames: state.patternNames, world: world)
 
             case .loadFavorites:
-                return self.loadFavoritesEffect()
+                return self.loadFavoritesEffect(world: world)
 
             case let .didLoadFavorites(patternNames):
                 state.patternNames = patternNames ?? []
 
             case .saveFavorites:
-                return self.saveFavoritesEffect(patternNames: state.patternNames)
+                return self.saveFavoritesEffect(patternNames: state.patternNames, world: world)
 
             case .didSaveFavorites:
                 break
@@ -55,7 +55,7 @@ extension Favorite
 
     typealias EffectMapping<S: Scheduler> = Harvester<Input, State>.EffectMapping<World<S>, EffectQueue, EffectID>
 
-    typealias Effect<S: Scheduler> = Harvest.Effect<World<S>, Input, EffectQueue, EffectID>
+    typealias Effect<S: Scheduler> = Harvest.Effect<Input, EffectQueue, EffectID>
 
     typealias EffectQueue = BasicEffectQueue
 
@@ -91,15 +91,14 @@ extension Favorite
         return patternNames
     }
 
-    private static func loadFavoritesEffect<S: Scheduler>() -> Effect<S>
+    private static func loadFavoritesEffect<S: Scheduler>(world: World<S>) -> Effect<S>
     {
-        Effect { world in
-            simpleEffectPublisher(
-                run: world.loadFavorites,
-                inject: Input.didLoadFavorites
-            )
-                .subscribe(on: world.fileScheduler)
-        }
+        simpleEffectPublisher(
+            run: world.loadFavorites,
+            inject: Input.didLoadFavorites
+        )
+        .subscribe(on: world.fileScheduler)
+        .toEffect()
     }
 
     private static func defaultSaveFavorites(patternNames: [String]) throws
@@ -115,15 +114,14 @@ extension Favorite
         #endif
     }
 
-    private static func saveFavoritesEffect<S: Scheduler>(patternNames: [String]) -> Effect<S>
+    private static func saveFavoritesEffect<S: Scheduler>(patternNames: [String], world: World<S>) -> Effect<S>
     {
-        Effect { world in
-            simpleEffectPublisher(
-                run: { try world.saveFavorites(patternNames) },
-                inject: { _ in Input.didSaveFavorites }
-            )
-                .subscribe(on: world.fileScheduler)
-        }
+        simpleEffectPublisher(
+            run: { try world.saveFavorites(patternNames) },
+            inject: { _ in Input.didSaveFavorites }
+        )
+        .subscribe(on: world.fileScheduler)
+        .toEffect()
     }
 
     private static let favoritesFileName = "favorites.json"
