@@ -120,7 +120,7 @@ extension PatternSelect
 
     typealias EffectMapping<S: Scheduler> = Harvester<Input, State>.EffectMapping<World<S>, EffectQueue, EffectID>
 
-    typealias Effect<S: Scheduler> = Harvest.Effect<Input, EffectQueue, EffectID>
+    typealias Effect = Harvest.Effect<Input, EffectQueue, EffectID>
 
     typealias EffectQueue = BasicEffectQueue
 
@@ -200,7 +200,7 @@ extension PatternSelect
         return sections
     }
 
-    private static func loadPatternFilesEffect<S: Scheduler>(world: World<S>) -> Effect<S>
+    private static func loadPatternFilesEffect<S: Scheduler>(world: World<S>) -> Effect
     {
         simpleEffectPublisher(
             run: world.loadPatterns,
@@ -210,7 +210,7 @@ extension PatternSelect
         .toEffect()
     }
 
-    private static func parsePatternFileEffect<S: Scheduler>(url: URL, world: World<S>) -> Effect<S>
+    private static func parsePatternFileEffect<S: Scheduler>(url: URL, world: World<S>) -> Effect
     {
         simpleEffectPublisher(
             run: { try Pattern.parseRunLengthEncoded(url: url) },

@@ -82,7 +82,7 @@ extension Root
             case let .patternSelect(.didParsePatternFile(pattern)):
                 state.patternSelect = nil
 
-                var gameEffect: Effect<S> = .empty
+                var gameEffect: Effect = .empty
 
                 // FIXME:
                 // This logic basically tee-ing `EffectMapping` between `Root` (parent) and `Game` (child),
@@ -120,7 +120,7 @@ extension Root
 
     public typealias EffectMapping<S: Scheduler> = Harvester<Input, State>.EffectMapping<World<S>, EffectQueue, EffectID>
 
-    public typealias Effect<S: Scheduler> = Harvest.Effect<Input, EffectQueue, EffectID>
+    public typealias Effect = Harvest.Effect<Input, EffectQueue, EffectID>
 
     public typealias EffectQueue = BasicEffectQueue
 

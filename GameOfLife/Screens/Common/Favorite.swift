@@ -55,7 +55,7 @@ extension Favorite
 
     typealias EffectMapping<S: Scheduler> = Harvester<Input, State>.EffectMapping<World<S>, EffectQueue, EffectID>
 
-    typealias Effect<S: Scheduler> = Harvest.Effect<Input, EffectQueue, EffectID>
+    typealias Effect = Harvest.Effect<Input, EffectQueue, EffectID>
 
     typealias EffectQueue = BasicEffectQueue
 
@@ -91,7 +91,7 @@ extension Favorite
         return patternNames
     }
 
-    private static func loadFavoritesEffect<S: Scheduler>(world: World<S>) -> Effect<S>
+    private static func loadFavoritesEffect<S: Scheduler>(world: World<S>) -> Effect
     {
         simpleEffectPublisher(
             run: world.loadFavorites,
@@ -114,7 +114,7 @@ extension Favorite
         #endif
     }
 
-    private static func saveFavoritesEffect<S: Scheduler>(patternNames: [String], world: World<S>) -> Effect<S>
+    private static func saveFavoritesEffect<S: Scheduler>(patternNames: [String], world: World<S>) -> Effect
     {
         simpleEffectPublisher(
             run: { try world.saveFavorites(patternNames) },
